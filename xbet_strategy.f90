@@ -9,9 +9,14 @@ program xbet_strategy
    integer :: i, ierr, ifrac, ipath
    real(kind=dp) :: wealth, bet_size, frac, wealth_term(npaths)
    logical, parameter :: verbose = .false.
-   print "('maximum wealth: ',f0.1)", wealth_max
-   print "('maximum # of bets: ', i0)", max_bets
-   print "('# of paths: ', i0)", npaths
+   character (len=*), parameter :: fmt_cr = "(a20,':',*(1x,f8.4))", fmt_ci = "(a20,':',*(1x,i8))"
+   print fmt_cr,"initial wealth", wealth_init
+   print fmt_cr,"maximum wealth", wealth_max
+   print fmt_cr,"prob gain", prob
+   print fmt_cr,"gain", gain
+   print fmt_cr,"loss", loss
+   print fmt_ci,"maximum # of bets", max_bets
+   print fmt_ci,"# of paths", npaths
    print "(/,'stats on terminal wealth vs. fractional bet size')"
    print "(*(a9))", "frac_bet", "mean", "min", "max", "prob_max"
    do ifrac = 1, nfrac
