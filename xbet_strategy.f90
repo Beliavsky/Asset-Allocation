@@ -6,7 +6,7 @@ program xbet_strategy
                                wealth_init = 25.0_dp, wealth_max = 250.0_dp, &
                                frac_min = 0.05_dp, frac_h = 0.05_dp
    integer, parameter :: max_bets = 300, npaths = 10**5, nfrac = 20
-   integer :: i, ierr, ifrac, ipath
+   integer :: i, ierr, ifrac, ipath, nbets(npaths)
    real(kind=dp) :: wealth, bet_size, frac, wealth_term(npaths)
    logical, parameter :: verbose = .false.
    character (len=*), parameter :: fmt_cr = "(a20,':',*(1x,f8.4))", fmt_ci = "(a20,':',*(1x,i8))"
@@ -18,9 +18,10 @@ program xbet_strategy
    print fmt_ci,"maximum # of bets", max_bets
    print fmt_ci,"# of paths", npaths
    print "(/,'stats on terminal wealth vs. fractional bet size')"
-   print "(*(a9))", "frac_bet", "mean", "min", "max", "prob_max"
+   print "(*(a12))", "frac_bet", "mean", "min", "max", "prob_max", "mean_#bets"
    do ifrac = 1, nfrac
       frac = frac_min + (ifrac - 1)*frac_h
+      nbets = max_bets
       do ipath = 1, npaths
          wealth = wealth_init
          do i = 1, max_bets
@@ -29,17 +30,20 @@ program xbet_strategy
             call bet(bet_size, prob, gain, loss, wealth_max, wealth, ierr)
             if (wealth <= 0.0_dp) then
                if (verbose) print *, "lost all money"
+               nbets(ipath) = i
                exit
             else if (wealth + tol >= wealth_max) then
                if (verbose) print *, "achieved maximum wealth"
+               nbets(ipath) = i
                exit
             end if
          end do
          if (verbose) print "(/,a,f8.1)", "final wealth: ", wealth
          wealth_term(ipath) = wealth
       end do
-      print "(*(f9.4))", &
+      print "(*(f12.4))", &
          frac, sum(wealth_term)/npaths, minval(wealth_term), maxval(wealth_term), &
-         count(wealth_max - wealth_term < tol) / real(npaths, kind=dp)
+         count(wealth_max - wealth_term < tol) / real(npaths, kind=dp), &
+         sum(nbets) / real(npaths, kind=dp)
    end do
 end program xbet_strategy
