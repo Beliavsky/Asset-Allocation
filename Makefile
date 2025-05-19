@@ -1,7 +1,7 @@
-executables = xbet_gfort.exe
+executables = xbet_strategy_gfort.exe
 FC     = gfortran
 FFLAGS = -O0 -Wall -Werror=unused-parameter -Werror=unused-variable -Werror=unused-function -Wno-maybe-uninitialized -Wno-surprising -fbounds-check -static -g -fmodule-private
-obj    = kind.o bet.o xbet.o
+obj    = kind.o bet.o xbet_strategy.o
 
 all: $(executables)
 
@@ -9,11 +9,11 @@ all: $(executables)
 %.o: %.f90
 	$(FC) $(FFLAGS) -c $<
 
-xbet_gfort.exe: kind.o bet.o xbet.o
-	$(FC) -o xbet_gfort.exe kind.o bet.o xbet.o $(FFLAGS)
+xbet_strategy_gfort.exe: kind.o bet.o xbet_strategy.o
+	$(FC) -o xbet_strategy_gfort.exe kind.o bet.o xbet_strategy.o $(FFLAGS)
 
 run: $(executables)
-	./xbet_gfort.exe
+	./xbet_strategy_gfort.exe
 
 clean:
 	rm -f $(executables) $(obj)
