@@ -32,7 +32,7 @@ program xbet_strategy
          do i = 1, max_bets
             if (verbose) write (*, "(/,'bet #', i0, /, 'wealth = ',f0.1)") i, wealth
             if (vary_frac) then
-               frac_use = min(1.0_dp, max(frac, (wealth_max/wealth)**(1.0_dp/(max_bets-i)) - 1.0_dp))
+               frac_use = min(1.0_dp, max(frac, (wealth_max/wealth)**(1.0_dp/(max_bets-i+1)) - 1.0_dp))
             else
                frac_use = frac
             end if
